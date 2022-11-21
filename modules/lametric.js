@@ -3,7 +3,12 @@
  *
  * Example usage:
  *
- * new LaMetricResponse().addText("Hello!")
+ * const {LaMetricResponse} = require("./lametric.js")
+ *
+ * new LaMetricResponse()
+ *   .addText("Hello!", "i50")
+ *   .addGoalData(0, 100, 50, "%", "i50")
+ *   .addChartData([10, 20, 5])
  */
 class LaMetricResponse {
     constructor() {
@@ -19,8 +24,8 @@ class LaMetricResponse {
         return this.addFrame(new LaMetricTextFrame(text, icon))
     }
 
-    addGoalData(text, icon, start, end, current) {
-        return this.addFrame(new LaMetricTextFrame(text, icon).addGoalData(start, end, current))
+    addGoalData(start, end, current, unit, icon) {
+        return this.addFrame(new LaMetricGoalFrame(start, end, current, unit, icon))
     }
 
     addChartData(intArray) {
@@ -37,10 +42,16 @@ class LaMetricTextFrame extends LaMetricFrame {
         this.text = text
         this.icon = icon
     }
+}
 
-    addGoalData(start, end, current, unit) {
-        this.goalData = {start: start, end: end, current: current, unit: unit}
-        return this
+class LaMetricGoalFrame extends LaMetricFrame {
+    constructor(start, end, current, unit, icon) {
+        super();
+        this.start = start
+        this.end = end
+        this.current = current
+        this.unit = unit
+        this.icon = icon
     }
 }
 
